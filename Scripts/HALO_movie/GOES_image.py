@@ -7,6 +7,9 @@ from calendar import monthrange
 import fire
 import os
 
+#lon,lat,debut, fin, pas de temps, resolution, varid
+
+https://wvs.earthdata.nasa.gov/api/v1/snapshot?REQUEST=GetSnapshot&TIME=2020-01-24T17:20:00Z&BBOX=12.310710570845181,-59.77875762732572,13.879946623093044,-57.244871330630964&CRS=EPSG:4326&LAYERS=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels,Reference_Features&WRAP=x,x,x&FORMAT=image/jpeg&WIDTH=1153&HEIGHT=714&ts=1580766913339
 
 def download_imgs(year, month, date, time, save_path, lon_range, lat_range,
                   deg2pix=1000, satellite='Aqua', exist_skip=False, var='CorrectedReflectance_TrueColor'):
@@ -28,6 +31,11 @@ def download_imgs(year, month, date, time, save_path, lon_range, lat_range,
                        str(year)+d+loc+'&epsg=4326'+layer+
                        '&opacities=1,1&worldfile=false&format=image/jpeg'+
                        size)
+    
+    lon_lat = lat_min+','+lon_min+'lat_max'+','+'lon_max'
+    
+    url = ('https://wvs.earthdata.nasa.gov/api/v1/snapshot?REQUEST=GetSnapshot&TIME='+date+'&BBOX'+lon_lat+'LAYERS=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels,Reference_Features&WRAP=x,x,x&FORMAT=image/jpeg&WIDTH=1153&HEIGHT=714&ts=1580766913339')
+           
     save_str = (save_path+f'/{satellite}_CorrectedReflectance'+str(year)+
                     date.strftime('%m')+'{:02d}'.format(date.day)+str(time)+loc_str+
                     '.jpeg')
@@ -42,6 +50,32 @@ def download_imgs(year, month, date, time, save_path, lon_range, lat_range,
 
 if __name__ == '__main__':
     fire.Fire(download_imgs)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Builds a netCDF file suitable for computing radiative fluxes by merging a background sounding a sonde file from Aspen")
+    parser.add_argument("--sonde_file", type=str, default="input/HALO/20200119/AVAPS_Dropsondes/processed/D20200119_161410_PQC.nc",
+                        help="Name of sonde file")
+    parser.add_argument("--background_file", type=str, default='tropical-atmosphere.nc',
+                        help="Directory where reference values are")
+    parser.add_argument("--deltaP", type=int, default=100,
+                        help="Pressure discretization of sonde (Pa, integer)")
+    parser.add_argument("--sfc_emissivity", type=float, default=0.98, dest="emis",
+                        help="Surface emissivity (spectrally constant)")
+    parser.add_argument("--sfc_albedo", type=float, default=0.07, dest="alb",
+                        help="Surface albedo (spectrally constant, same for direct and diffuse)")
+    parser.add_argument("--cos_sza", type=float, default=0, dest="mu0",
+                        help="Cosine of solar zenith angle, default is to compute from sonde file (someday)")
+    args = parser.parse_args()
+
+    # Generalize this
+    output_dir      = '.'
+    output_file     = os.path.basename(args.sonde_file)[:-3] + "_rad.nc"
+
+    # Any error checking on arguments?
+
+    profile = combine_sonde_and_background(args.sonde_file, args.background_file, \
+                                           deltaP=args.deltaP, sfc_emis=args.emis, sfc_alb=args.alb, mu0=args.mu0)
+    profile.to_netcdf(os.path.join(output_dir, output_file))
 
 '''#     for yr in range(year_range[0], year_range[1]):
 #         for m in months:
