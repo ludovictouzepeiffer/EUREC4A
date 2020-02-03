@@ -4,7 +4,7 @@
 # 4 steps
 
 ## 1. Download GOES data from Worldview
-# write python script using Hauke's script
+# execute python GOES_image.py
 
 ## 2. (if necessary) break gif in separated png files
 # e.g. convert movies/nasa-worldview-2020-01-24T10_00Z-to-2020-01-24T16_00Z.gif movies/temp/frame.png
