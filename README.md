@@ -4,4 +4,4 @@ This repository aims to share useful scripts to access and analyze data collecte
 
 Data
 
-Where examples of data should be saved
+Where examples of data should be saved.
