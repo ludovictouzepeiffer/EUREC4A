@@ -10,6 +10,11 @@ import os
 #lon,lat,debut, fin, pas de temps, resolution, varid
 
 https://wvs.earthdata.nasa.gov/api/v1/snapshot?REQUEST=GetSnapshot&TIME=2020-01-24T17:20:00Z&BBOX=12.310710570845181,-59.77875762732572,13.879946623093044,-57.244871330630964&CRS=EPSG:4326&LAYERS=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels,Reference_Features&WRAP=x,x,x&FORMAT=image/jpeg&WIDTH=1153&HEIGHT=714&ts=1580766913339
+                
+https://wvs.earthdata.nasa.gov/api/v1/snapshot?REQUEST=GetSnapshot&TIME=2020-02-04T12:50:00Z&BBOX=11.590295139568504,-60.06121763750723,15.012647303659342,-55.119001003028224&CRS=EPSG:4326&LAYERS=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Features,Reference_Labels&WRAP=x,x,x&FORMAT=image/jpeg&WIDTH=1125&HEIGHT=779&ts=3636363636336                
+                
+                
+https://wvs.earthdata.nasa.gov/api/v1/snapshot?REQUEST=GetSnapshot&TIME=2020-02-04T12:50:00Z&BBOX=11.590295139568504,-60.06121763750723,15.012647303659342,-55.119001003028224&CRS=EPSG:4326&LAYERS=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Features,Reference_Labels&WRAP=x,x,x&FORMAT=image/jpeg&WIDTH=1125&HEIGHT=779&ts=1580823288926
 
 def download_imgs(year, month, date, time, save_path, lon_range, lat_range,
                   deg2pix=1000, satellite='Aqua', exist_skip=False, var='CorrectedReflectance_TrueColor'):
@@ -31,10 +36,16 @@ def download_imgs(year, month, date, time, save_path, lon_range, lat_range,
                        str(year)+d+loc+'&epsg=4326'+layer+
                        '&opacities=1,1&worldfile=false&format=image/jpeg'+
                        size)
+    lat_min = 11.5
+    lat_max = 15
+    lon_min = -60
+    lon_max = -55
+    width = 1125
+    height = width*(lat_max-lat_min)/(lon_max-lon_min)
     
     lon_lat = lat_min+','+lon_min+'lat_max'+','+'lon_max'
     
-    url = ('https://wvs.earthdata.nasa.gov/api/v1/snapshot?REQUEST=GetSnapshot&TIME='+date+'&BBOX'+lon_lat+'LAYERS=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels,Reference_Features&WRAP=x,x,x&FORMAT=image/jpeg&WIDTH=1153&HEIGHT=714&ts=1580766913339')
+    url = ('https://wvs.earthdata.nasa.gov/api/v1/snapshot?REQUEST=GetSnapshot&TIME='+date+'&BBOX'+lon_lat+'LAYERS=GOES-East_ABI_Band2_Red_Visible_1km,Reference_Labels,Reference_Features&WRAP=x,x,x&FORMAT=image/jpeg&WIDTH='+width+'&HEIGHT='+height+'&ts=1580766913339')
            
     save_str = (save_path+f'/{satellite}_CorrectedReflectance'+str(year)+
                     date.strftime('%m')+'{:02d}'.format(date.day)+str(time)+loc_str+
