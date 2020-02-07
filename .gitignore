@@ -1,2 +1,4 @@
 Data_local/
 *.ipynb_checkpoints*
+Outputs/
+
