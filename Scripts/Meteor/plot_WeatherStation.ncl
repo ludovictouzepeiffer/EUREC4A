@@ -1,10 +1,12 @@
-;*********************************************************************************
-;*********************************************************************************
+;**********************************************************************************************
+; Created in January 2020 by Jessica Vial
+; Plot DSHIP data from METEOR per day: lat/lon, tair, ts, rh, wind speed, wind direction, LCL
+;**********************************************************************************************
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl" 
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/shea_util.ncl"
-;*********************************************************************************
+;**********************************************************************************************
 
 begin
 
@@ -17,7 +19,7 @@ begin
 print(" ")
 print("Read in data")
  
- flnm = monStr+dayStr+"_min.dat"
+ flnm = "../../Data_local/Measurements/METEOR/DSHIP/"+monStr+dayStr+"_min.dat"
  strs = asciiread(flnm,-1,"string")
  strs = str_sub_str(strs, "", "MisVal")
  nrow = numAsciiRow(flnm)
@@ -117,7 +119,7 @@ print("Plot data")
 
  MyColors  = (/"white","black","navyblue","Steelblue","PowderBlue","forestgreen","Palegreen","Gold","Orange","Red"/)
 
- wks   = gsn_open_wks("png","meteor_"+mon+dayStr)
+ wks   = gsn_open_wks("png","../../Outputs/meteor_"+mon+dayStr)
 
  np=8
  plot0    = new((/np/),graphic)
