@@ -1,3 +1,5 @@
+# by Benjamin Fildier
+
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -14,6 +16,8 @@ from matplotlib.colors import LinearSegmentedColormap
 
 
 def imageNameRoot(dtime):
+
+    """Takes the current datetime and rounds it to the nearest 10mn increment."""
     
     date_str = dtime.strftime('%Y-%m-%d')
         
@@ -53,12 +57,16 @@ def loadImage(dtime):
 
 def outputFileName(dtime):
     
+    """Formats current date to name of output image file"""
+
     nameroot = dtime.strftime('%Y-%m-%dT%H:%M')
     
     return nameroot+'Z_HALO.jpeg' # and file extension
     
 def loadSondes(dtime):
     
+    """Load all sonde data as a list xarrays for current flight day"""
+
     allsondefiles = glob.glob(os.path.join(sondedir,
                                        dtime.strftime('%Y%m%d'),
                                        'AVAPS_Dropsondes/processed/*_PQC.nc'))
@@ -75,7 +83,10 @@ def loadSondes(dtime):
 
 def getMatchingSondes(allsondes,dtime,dt_fade,verbose=False):
     
-    """ 
+    """
+    Find the sondes to be displayed on the image, including those currently recording
+    and those fallen in the ocean but still appearing on the image.
+
     Arguments:
     - allsondes: list of all sondes already loaded
     - dtime: datetime object, current time
@@ -106,12 +117,16 @@ def getMatchingSondes(allsondes,dtime,dt_fade,verbose=False):
     return sondes
 
 def showTime(ax,dtime):
+
+    """Display current time on the upper left corner of GOES image"""
     
     ax.text(lonmin+0.1,latmax-0.45,dtime.strftime('%Y-%m-%d\n%H:%M UTC'),
             color='white',fontsize=30)
 
 def showSonde(ax,dtime,sonde,cmap_falling=plt.cm.GnBu,altmax=9100,col_fading='darkorange',showtime=True):
     
+    """Display sonde on GOES image. Colors are: green if being launched, calculated based on height using cmap_falling if still in the air, or col_fading (default 'darkorange') if at the surface"""
+
     dtime_str = dtime.strftime('%Y-%m-%dT%H:%M')
     sonde_times = np.array([str(sonde.time[i].values)[:16] for i in range(sonde.time.size)])
     matching_times = np.where(sonde_times == dtime_str)[0]
@@ -162,6 +177,8 @@ def showSonde(ax,dtime,sonde,cmap_falling=plt.cm.GnBu,altmax=9100,col_fading='da
 
 def makeImage(image,dtime,allsondes,dt_fade,col_top,col_bottom,altmax,outputfilepath):
     
+    """Display GOES image, HALO circle and relevant dropsondes in their current state, and save image to outputfilepath"""
+
     fig = plt.figure(figsize=(20,10))
     ax = fig.gca()
 
