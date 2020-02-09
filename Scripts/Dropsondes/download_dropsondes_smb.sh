@@ -3,11 +3,11 @@
 #by Ludovic Touze-Peiffer
 #Download data from the nas server and put them in a Data_local
 
-daylist=(20200124 20200126 20200128 20200130 20200131 20200202 20200205 20200207)
+daylist=(20200124 20200126 20200128 20200130 20200131 20200202 20200205 20200207 20200209)
 
 cd ../../Data_local/Measurements/HALO/
 
-for iday in {0..8} ; do
+for iday in {8..8} ; do
 	
 	day=${daylist[iday]}
 
