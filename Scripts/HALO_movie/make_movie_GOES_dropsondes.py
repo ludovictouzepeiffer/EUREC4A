@@ -357,7 +357,6 @@ if __name__ == "__main__":
     Nt = int((end-start).seconds/delta_t)
 
     verbose = True
-
     if verbose:
 
         print()
@@ -369,6 +368,7 @@ if __name__ == "__main__":
         print('Start movie at %s'%start_time)
         print()
 
+    # make movie
     makeMovie(verbose)
 
     if verbose:
