@@ -1,0 +1,13 @@
+Data_local/
+*.ipynb_checkpoints*
+Outputs/
+
+scripts/Dropsondes/LCL/*.wmo
+*.DS_Store*
+scripts/Dropsondes/LCL/BCO*.nc
+input/ATR-42
+scripts/Dropsondes/LCL/lcl*
+Outputs/movies/temp/*
+scripts/HALO_movie/test*
+scripts/Dropsondes/LCL/2020-*/
+*/*/__pycache__/
